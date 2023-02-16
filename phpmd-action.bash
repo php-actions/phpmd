@@ -60,7 +60,7 @@ then
 	command_string+=($ACTION_ARGS)
 fi
 
-echo "Command: ${command_string[@]}" >> output.log 2>&1
+echo "Command: ${command_string[@]}"
 
 docker run --rm \
 	--volume "${phar_path}":/usr/local/bin/phpmd \
