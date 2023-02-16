@@ -27,7 +27,7 @@ inputs:
   output:
     description: A report format
     default: text
-    required: true
+    required: false
 
   minimumpriority:
     description: rule priority threshold; rules with lower priority than this will not be used
