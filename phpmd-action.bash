@@ -60,12 +60,10 @@ then
 	command_string+=($ACTION_ARGS)
 fi
 
-echo "Command: ${command_string[@]}"
-
 docker run --rm \
 	--volume "${phar_path}":/usr/local/bin/phpmd \
 	--volume "${GITHUB_WORKSPACE}":/app \
 	--workdir /app \
 	--network host \
 	--env-file <( env| cut -f1 -d= ) \
-	${docker_tag} "${command_string[@]}"
+	${docker_tag} "${command_string[@]}" && echo "PHPMD completed successfully"
