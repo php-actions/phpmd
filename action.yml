@@ -1,0 +1,83 @@
+name: PHPMD (php-actions)
+description: Run your PHP Mess Detector tests in your Github Actions.
+
+inputs:
+  version:
+    description: What version of PHPMD to use
+    default: latest
+    required: false
+
+  php_version:
+    description: What version of PHP to use
+    default: latest
+    required: false
+
+  vendored_phpmd_path:
+    description: Path to a vendored phpmd binary
+    required: false
+
+  path:
+    description: A php source code filename or directory. Can be a comma-separated string
+    required: true
+
+  ruleset:
+    description: A ruleset filename or a comma-separated string of rulesetfilenames
+    required: true
+
+  output:
+    description: A report format
+    default: text
+    required: false
+
+  minimumpriority:
+    description: rule priority threshold; rules with lower priority than this will not be used
+    required: false
+
+  reportfile:
+    description: send report output to a file; default to STDOUT
+    required: false
+
+  suffixes:
+    description: comma-separated string of valid source code filename extensions, e.g. php,phtml
+    required: false
+
+  exclude:
+    description: comma-separated string of patterns that are used to ignore directories. Use asterisks to exclude by pattern. For example *src/foo/*.php or *src/foo/*
+    required: false
+
+  strict:
+    description: also report those nodes with a @SuppressWarnings annotation
+    required: false
+
+  args:
+    description: Extra arguments to pass to the phpmd binary
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - env:
+        ACTION_TOKEN: ${{ github.token }}
+        ACTION_VERSION: ${{ inputs.version }}
+        ACTION_PHP_VERSION: ${{ inputs.php_version }}
+        ACTION_PHPMD_PATH: ${{ inputs.vendored_phpmd_path }}
+        ACTION_PATH: ${{ inputs.path }}
+        ACTION_RULESET: ${{ inputs.ruleset }}
+        ACTION_OUTPUT: ${{ inputs.output }}
+        ACTION_MINIMUMPRIORITY: ${{ inputs.minimumpriority }}
+        ACTION_REPORTFILE: ${{ inputs.reportfile }}
+        ACTION_SUFFIXES: ${{ inputs.suffixes }}
+        ACTION_EXCLUDE: ${{ inputs.exclude }}
+        ACTION_STRICT: ${{ inputs.strict }}
+        ACTION_ARGS: ${{ inputs.args }}
+
+      id: phpmd_run
+      run: |
+        set -e
+        bash <(curl -s https://raw.githubusercontent.com/php-actions/php-build/cee5b9fa9fbc4c888e7a62bbb7b8eade18e3c56b/php-build.bash) phpmd
+        ${{ github.action_path }}/phpmd-action.bash
+      shell: bash
+
+branding:
+  icon: 'check-square'
+  color: 'purple'
