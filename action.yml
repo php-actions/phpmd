@@ -1,4 +1,4 @@
-name: PHPMD (php-actions)
+name: PHP Mess Detector (php-actions)
 description: Run your PHP Mess Detector tests in your Github Actions.
 
 inputs:
