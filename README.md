@@ -27,7 +27,7 @@ jobs:
 
       - name: Composer install
         uses: php-actions/composer@v6
-	  
+
       - name: PHP Mess Detector
         uses: php-actions/phpmd@v1
         with:
