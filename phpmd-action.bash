@@ -20,7 +20,7 @@ then
     exit 1
 fi
 
-echo "phar_path=$phar_path" >> output.log 2>&1
+echo "::debug::phar_path=$phar_path"
 
 if [[ ! -x "$phar_path" ]]
 then
@@ -72,7 +72,7 @@ then
 	command_string+=($ACTION_ARGS)
 fi
 
-echo "Command: ${command_string[@]}" >> output.log 2>&1
+echo "::debug::PHPMD Command: ${command_string[@]}"
 
 if [ -Z $ACTION_PHPUNIT_PATH ]
 then
