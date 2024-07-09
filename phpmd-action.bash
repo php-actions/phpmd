@@ -7,24 +7,24 @@ if [ -z "$ACTION_PHPMD_PATH" ]
 then
 	phar_url="https://www.getrelease.download/phpmd/phpmd/$ACTION_VERSION/phar"
 	phar_path="${github_action_path}/phpmd.phar"
-    command_string=("phpmd")
+	command_string=("phpmd")
 	curl --silent -H "User-agent: cURL (https://github.com/php-actions)" -L "$phar_url" > "$phar_path"
 else
 	phar_path="${GITHUB_WORKSPACE}/$ACTION_PHPMD_PATH"
-    command_string=($ACTION_PHPMD_PATH)
+	command_string=($ACTION_PHPMD_PATH)
 fi
 
 if [ ! -f "${phar_path}" ]
 then
-    echo "Error: The phpmd binary \"${phar_path}\" does not exist in the project"
-    exit 1
+	echo "Error: The phpmd binary \"${phar_path}\" does not exist in the project"
+	exit 1
 fi
 
 echo "::debug::phar_path=$phar_path"
 
 if [[ ! -x "$phar_path" ]]
 then
-    chmod +x $phar_path || echo "Error: the PHAR must have executable bit set" && exit 1
+	chmod +x $phar_path || echo "Error: the PHAR must have executable bit set" && exit 1
 fi
 
 if [ -n "$ACTION_PATH" ]
@@ -76,18 +76,18 @@ echo "::debug::PHPMD Command: ${command_string[@]}"
 
 if [ -Z $ACTION_PHPUNIT_PATH ]
 then
-    docker run --rm \
-    	--volume "${phar_path}":/usr/local/bin/phpmd \
-    	--volume "${GITHUB_WORKSPACE}":/app \
-    	--workdir /app \
-    	--network host \
-    	--env-file <( env| cut -f1 -d= ) \
-    	${docker_tag} "${command_string[@]}" && echo "PHPMD completed successfully"
+	docker run --rm \
+		--volume "${phar_path}":/usr/local/bin/phpmd \
+		--volume "${GITHUB_WORKSPACE}":/app \
+		--workdir /app \
+		--network host \
+		--env-file <( env| cut -f1 -d= ) \
+		${docker_tag} "${command_string[@]}" && echo "PHPMD completed successfully"
 else
-    docker run --rm \
-        --volume "${GITHUB_WORKSPACE}":/app \
-        --workdir /app \
-        --network host \
-        --env-file <( env| cut -f1 -d= ) \
-        ${docker_tag} "/app/${command_string[@]}" && echo "PHPMD completed successfully"
+	docker run --rm \
+		--volume "${GITHUB_WORKSPACE}":/app \
+		--workdir /app \
+		--network host \
+		--env-file <( env| cut -f1 -d= ) \
+		${docker_tag} "/app/${command_string[@]}" && echo "PHPMD completed successfully"
 fi
