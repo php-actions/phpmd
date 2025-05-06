@@ -74,7 +74,7 @@ fi
 
 echo "::debug::PHPMD Command: ${command_string[@]}"
 
-if [ -Z $ACTION_PHPUNIT_PATH ]
+if [ -Z $ACTION_PHPMD_PATH ]
 then
 	docker run --rm \
 		--volume "${phar_path}":/usr/local/bin/phpmd \
