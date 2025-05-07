@@ -74,20 +74,9 @@ fi
 
 echo "::debug::PHPMD Command: ${command_string[@]}"
 
-if [ -z "$ACTION_PHPMD_PATH" ]
-then
-	docker run --rm \
-		--volume "${phar_path}":/usr/local/bin/phpmd \
-		--volume "${GITHUB_WORKSPACE}":/app \
-		--workdir /app \
-		--network host \
-		--env-file <( env| cut -f1 -d= ) \
-		${docker_tag} "${command_string[@]}" && echo "PHPMD completed successfully"
-else
-	docker run --rm \
-		--volume "${GITHUB_WORKSPACE}":/app \
-		--workdir /app \
-		--network host \
-		--env-file <( env| cut -f1 -d= ) \
-		${docker_tag} "/app/${command_string[@]}" && echo "PHPMD completed successfully"
-fi
+docker run --rm \
+	--volume "${GITHUB_WORKSPACE}":/app \
+	--workdir /app \
+	--network host \
+	--env-file <( env| cut -f1 -d= ) \
+	${docker_tag} "/app/${command_string[@]}" && echo "PHPMD completed successfully"
