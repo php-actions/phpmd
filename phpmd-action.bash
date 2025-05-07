@@ -3,6 +3,20 @@ set -e
 github_action_path=$(dirname "$0")
 docker_tag=$(cat ./docker_tag)
 
+echo "Docker tag: $docker_tag" >> output.log 2>&1
+
+if [ "$ACTION_VERSION" = "composer" ]
+then
+	VENDOR_BIN="vendor/bin/phpmd"
+	if test -f "$VENDOR_BIN"
+	then
+		ACTION_PHPMD_PATH="$VENDOR_BIN"
+	else
+		echo "Trying to use version installed by Composer, but there is no file at $VENDOR_BIN"
+		exit 1
+	fi
+fi
+
 if [ -z "$ACTION_PHPMD_PATH" ]
 then
 	phar_url="https://www.getrelease.download/phpmd/phpmd/$ACTION_VERSION/phar"
@@ -74,20 +88,11 @@ fi
 
 echo "::debug::PHPMD Command: ${command_string[@]}"
 
-if [ -z "$ACTION_PHPMD_PATH" ]
-then
-	docker run --rm \
-		--volume "${phar_path}":/usr/local/bin/phpmd \
-		--volume "${GITHUB_WORKSPACE}":/app \
-		--workdir /app \
-		--network host \
-		--env-file <( env| cut -f1 -d= ) \
-		${docker_tag} "${command_string[@]}" && echo "PHPMD completed successfully"
-else
-	docker run --rm \
-		--volume "${GITHUB_WORKSPACE}":/app \
-		--workdir /app \
-		--network host \
-		--env-file <( env| cut -f1 -d= ) \
-		${docker_tag} "/app/${command_string[@]}" && echo "PHPMD completed successfully"
-fi
+docker run --rm \
+	--volume "$phar_path":/usr/local/bin/phpmd \
+	--volume "${GITHUB_WORKSPACE}/vendor/phpmd:/usr/local/phpmd" \
+	--volume "${GITHUB_WORKSPACE}":/app \
+	--workdir /app \
+	--network host \
+	--env-file <( env| cut -f1 -d= ) \
+	${docker_tag} "${command_string[@]}"

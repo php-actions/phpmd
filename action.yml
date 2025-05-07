@@ -4,7 +4,7 @@ description: Run your PHP Mess Detector tests in your Github Actions.
 inputs:
   version:
     description: What version of PHPMD to use
-    default: latest
+    default: composer
     required: false
 
   php_version:
@@ -74,7 +74,7 @@ runs:
       id: phpmd_run
       run: |
         set -e
-        bash <(curl -s https://raw.githubusercontent.com/php-actions/php-build/cee5b9fa9fbc4c888e7a62bbb7b8eade18e3c56b/php-build.bash) phpmd
+        bash <(curl -s https://raw.githubusercontent.com/php-actions/php-build/59e915e4b8eeab830231a5dce6ad0998adebac05/php-build.bash) phpmd
         ${{ github.action_path }}/phpmd-action.bash
       shell: bash
 
