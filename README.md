@@ -31,7 +31,7 @@ jobs:
       - name: PHP Mess Detector
         uses: php-actions/phpmd@v1
         with:
-          php_version: 8.1
+          php_version: 8.4
           path: src/
           output: text
           ruleset: test/phpmd/ruleset.xml
@@ -49,8 +49,8 @@ Inputs
 
 The following configuration options are available:
 
-+ `version` - What version of PHPMD to use
-+ `php_version` - What version of PHP to use
++ `version` - What version of PHPMD to use e.g. `latest`, or `9`, or `9.5.0` (default: `composer` - use the version specified in composer.json)
++ `php_version` - What version of PHP to use e.g. `8.4` (default: latest)
 + `vendored_phpmd_path` - Path to a vendored phpmd binary
 + `path` - A php source code filename or directory. Can be a comma-separated string
 + `ruleset` - A ruleset filename or a comma-separated string of rulesetfilenames
